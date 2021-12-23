@@ -10,12 +10,23 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productsService = Provider.of<ProductsService>(context);
+    final authService = Provider.of<AuthService>(context, listen: false);
 
     if (productsService.isLoading) return LoadingScreen();
     return Scaffold(
       appBar: AppBar(
         title: Text('Products'),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.login_outlined),
+          onPressed: () {
+            // En este caso no hace falta poner async y await porque
+            //no me interesa esperar a que se termine la accion sino
+            //que directamente termine la sesion y redirija al login
+            authService.logout();
+            Navigator.pushReplacementNamed(context, 'login');
+          },
+        ),
       ),
       body: ListView.builder(
         physics: BouncingScrollPhysics(),
